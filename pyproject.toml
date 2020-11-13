@@ -6,6 +6,8 @@ authors = ["Gabe <wei.g.chu@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+boto3 = "^1.16.17"
+decouple = "^0.0.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
