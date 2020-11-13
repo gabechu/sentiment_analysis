@@ -10,6 +10,7 @@ boto3 = "^1.16.17"
 python-decouple = "^3.3"
 checklist = "^0.0.10"
 jupyterlab = "^2.2.9"
+torch = "^1.7.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
