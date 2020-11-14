@@ -17,4 +17,7 @@ class Comprehend(object):
         return sess.client(service_name="comprehend", region_name=self.AWS_REGION)
 
     def detect_sentiment(self, text: str, language_code: str) -> Dict:
-        return self.model_func(Text=text, LanguageCode=language_code)
+        response = self.model_func(Text=text, LanguageCode=language_code)
+
+        keep_keys = {"Sentiment", "SentimentScore"}
+        return {key: value for key, value in response.items() if key in keep_keys}
