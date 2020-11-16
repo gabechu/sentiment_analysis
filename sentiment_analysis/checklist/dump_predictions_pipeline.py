@@ -22,7 +22,7 @@ def make_prediction(text: str, model: Comprehend, language_code: str = "en"):
     return model.detect_sentiment(text, language_code)
 
 
-def dump_predictions(file_path: str, predictions: Dict):
+def dump_predictions(file_path: str, predictions: List[Dict]):
     with open(file_path, "w") as f:
         for pred in predictions:
             str_pred = comprehend_to_checklist_predictions(pred)
