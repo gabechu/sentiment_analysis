@@ -31,7 +31,10 @@ def dump_predictions(file_path: str, predictions: Dict):
 
 def dump_predictions_pipeline():
     # config
-    test_text_file = "/Users/gabechu/Code/zendesk/sentiment_analysis/release_data/sentiment/tests_n500"
+    test_text_file = (
+        "/Users/gabechu/Code/zendesk/sentiment_analysis/release_data"
+        "/sentiment/tests_n500"
+    )
     dump_preds_file = "/Users/gabechu/Code/zendesk/sentiment_analysis/comprehend"
 
     # steps

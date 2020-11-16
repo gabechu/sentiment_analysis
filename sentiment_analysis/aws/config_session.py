@@ -9,11 +9,13 @@ def config_cognito_session(identity_pool_id: str, region: str) -> Session:
     identity_id = response["IdentityId"]
 
     response = client.get_credentials_for_identity(IdentityId=identity_id)
-    secretKey = response['Credentials']['SecretKey']
-    accessKey = response['Credentials']['AccessKeyId']
-    sessionToken = response['Credentials']['SessionToken']
+    secretKey = response["Credentials"]["SecretKey"]
+    accessKey = response["Credentials"]["AccessKeyId"]
+    sessionToken = response["Credentials"]["SessionToken"]
 
-    return Session(aws_access_key_id=accessKey,
-                   aws_secret_access_key=secretKey,
-                   aws_session_token=sessionToken,
-                   region_name=region)
+    return Session(
+        aws_access_key_id=accessKey,
+        aws_secret_access_key=secretKey,
+        aws_session_token=sessionToken,
+        region_name=region,
+    )

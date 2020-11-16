@@ -7,7 +7,8 @@ from .config_session import config_cognito_session
 def test_create_cognito_session():
     session = config_cognito_session(
         identity_pool_id="us-west-2:11aa1111-1aa1-1a1a-11aa-11aa1aaaa111",
-        region="us-west-2")
+        region="us-west-2",
+    )
 
     credentials = session.get_credentials()
     assert session.region_name == "us-west-2"
