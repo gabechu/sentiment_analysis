@@ -15,7 +15,9 @@ jobs:
           - task: Lint with flake8
             run: flake8 sentiment_analysis
           - task: Type check
-            run: mypy --config-file pyproject.toml pii_recognition
+            run: mypy --config-file pyproject.toml sentiment_analysis
+          - task: Unit test
+            run: pytest sentiment_analysis
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.7
