@@ -5,14 +5,18 @@ import math
 
 
 def calculate_comprehend_cost_no_batch(texts: List[str]) -> float:
+    """Inference costs for using Comprehend API for sentiment analysis."""
     # character encoding is UTF8 according to
     # https://docs.aws.amazon.com/comprehend/latest/dg/guidelines-and-limits.html
     # measured in units of 100 characters
-    units = map(lambda text: math.ceil(len(text) / 100), texts)
+    units = map(lambda text: int(math.ceil(len(text) / 100)), texts)
     # minimum charge per request is 3 unit (300 characters)
     revised_units = map(lambda length: length if length > 3 else 3, units)
 
-    total_cost = total_units = 0
+    # TODO: Unit-test all 3 scenarios. With this implementation, it'd take
+    # a lot of time.
+    total_cost: float = 0.
+    total_units: int = 0
     for curnt_units in list(revised_units):
         total_units += curnt_units
         # Price Per Unit

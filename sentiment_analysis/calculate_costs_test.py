@@ -1,5 +1,6 @@
-from .calculate_costs import calculate_comprehend_cost_no_batch
 from numpy.testing import assert_almost_equal
+
+from .calculate_costs import calculate_comprehend_cost_no_batch
 
 
 def test_calculate_comprehend_cost_no_batch_single_text():
@@ -21,6 +22,6 @@ def test_calculate_comprehend_cost_no_batch_equal_to_3_unit_per_request():
 
 
 def test_calculate_comprehend_cost_no_batch_greater_than_3_unit_per_request():
-    texts = ['t' * 550] * 10000
+    texts = ["t" * 550] * 10000
     actual = calculate_comprehend_cost_no_batch(texts)
-    assert_almost_equal(actual, 6.)
+    assert_almost_equal(actual, 6.0)
