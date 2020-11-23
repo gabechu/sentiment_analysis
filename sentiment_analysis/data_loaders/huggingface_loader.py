@@ -32,8 +32,8 @@ class HuggingfaceLoader(object):
         else:
             return df
 
-    def load_data(self) -> Union[DatasetDict, Dataset]:
-        return load_dataset(self.dataset_name)
+    def load_data(self):
+        self.data = load_dataset(self.dataset_name)
 
     def load_test_data(self) -> DataFrame:
         if not self.data:
