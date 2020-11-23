@@ -7,13 +7,11 @@ from pandas import DataFrame
 
 # TODO: add tests
 class HuggingfaceLoader(object):
-    filter_mapping = {
-        "sentiment140": ["text", "sentiment"]
-    }
+    filter_mapping = {"sentiment140": ["text", "sentiment"]}
 
     rename_mapping = {
         "allocine": {"review": "text"},
-        "sentiment140": {"sentiment": "label"}
+        "sentiment140": {"sentiment": "label"},
     }
 
     def __init__(self, dataset_name: str):
@@ -37,7 +35,7 @@ class HuggingfaceLoader(object):
 
     def load_test_data(self) -> DataFrame:
         if not self.data:
-            self.data = self.load_data()
+            self.load_data()
 
         test_data = self.data["test"].data
         df = test_data.to_pandas()
