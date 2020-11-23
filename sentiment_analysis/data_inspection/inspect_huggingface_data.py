@@ -2,8 +2,7 @@ from typing import Dict
 
 from pakkr import Pipeline, returns
 from pandas import DataFrame
-from sentiment_analysis.data_loaders.huggingface_loader import \
-    HuggingfaceLoader
+from sentiment_analysis.data_loaders.huggingface_loader import HuggingfaceLoader
 
 
 @returns(DataFrame)
@@ -23,7 +22,8 @@ def generate_reports(data) -> Dict:
         "Num of unique labels": len(uniques),
         "Min text length": data.num_chars.min(),
         "Max text length": data.num_chars.max(),
-        "Mean text length": data.num_chars.mean()
+        "Mean text length": data.num_chars.mean(),
+        "Example": {"Text": data.iloc[0].text, "Label": data.iloc[0].label},
     }
 
     # TODO: do not use print
@@ -31,4 +31,4 @@ def generate_reports(data) -> Dict:
     return report
 
 
-pipeline = Pipeline(load_data, generate_reports, _name='data inspection')
+pipeline = Pipeline(load_data, generate_reports, _name="data inspection")
