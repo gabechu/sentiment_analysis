@@ -236,6 +236,14 @@ six = "*"
 
 [[package]]
 category = "main"
+description = "Pipeline utility library"
+name = "pakkr"
+optional = false
+python-versions = ">=3.6"
+version = "0.1.0"
+
+[[package]]
+category = "main"
 description = "Powerful data structures for data analysis, time series, and statistics"
 name = "pandas"
 optional = false
@@ -474,7 +482,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [metadata]
-content-hash = "24a7f66c94ea38e400b69a662fadd5b4ed4f6a8fc9d2cc650157065b97abaf1f"
+content-hash = "356940de191e99a42b30c264ece7b8d76098508aed258415ee014bd5c2caffa4"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -610,6 +618,10 @@ numpy = [
 packaging = [
     {file = "packaging-20.4-py2.py3-none-any.whl", hash = "sha256:998416ba6962ae7fbd6596850b80e17859a5753ba17c32284f67bfff33784181"},
     {file = "packaging-20.4.tar.gz", hash = "sha256:4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8"},
+]
+pakkr = [
+    {file = "pakkr-0.1.0-py3-none-any.whl", hash = "sha256:7c49d54e3f81ebd6663e45215627a5b2e8e5975ce91083a8e345dc4b74d121d7"},
+    {file = "pakkr-0.1.0.tar.gz", hash = "sha256:35fd5d065746b3d8727b2177070f3029c438e22793bf6396e5340e64b12cc989"},
 ]
 pandas = [
     {file = "pandas-1.1.4-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:e2b8557fe6d0a18db4d61c028c6af61bfed44ef90e419ed6fadbdc079eba141e"},
