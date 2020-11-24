@@ -15,7 +15,7 @@ def calculate_comprehend_cost_no_batch(texts: List[str]) -> float:
 
     # TODO: Unit-test all 3 scenarios, with current implementation, it'd take
     # a lot of time.
-    total_cost: float = 0.
+    total_cost: float = 0.0
     total_units: int = 0
     for curnt_units in list(revised_units):
         total_units += curnt_units
