@@ -3,7 +3,7 @@ from typing import Union
 from datasets import DatasetDict, load_dataset
 from datasets.arrow_dataset import Dataset
 from pandas import DataFrame
-from pyarrow import Table
+from pyarrow.lib import Table
 
 
 class HuggingfaceLoader(object):
@@ -27,9 +27,9 @@ class HuggingfaceLoader(object):
         if dataset_name in supported_datasets:
             self.dataset_name = dataset_name
         else:
-            raise Exception(
-                f"Do not support dataset {dataset_name}, "
-                f"only supports {supported_datasets}"
+            raise ValueError(
+                f"Dataset {dataset_name} not found, "
+                f"supports only {supported_datasets}."
             )
 
     def load_data(self):
@@ -37,6 +37,10 @@ class HuggingfaceLoader(object):
 
     def load_test_data(self) -> DataFrame:
         data: Union[DatasetDict, Dataset] = load_dataset(self.dataset_name)
+
+        if "test" not in data:
+            raise KeyError(f"{self.dataset_name} does not have a test set.")
+
         test_data: Table = data["test"].data
         df = test_data.to_pandas()
 
