@@ -46,10 +46,11 @@ class HuggingfaceLoader(object):
 
         # filter columns
         if self.dataset_name in self.filter_mapping:
-            return df.filter(items=self.filter_mapping[self.dataset_name])
+            df = df.filter(items=self.filter_mapping[self.dataset_name])
 
         # rename columns
         if self.dataset_name in self.rename_mapping:
-            return df.rename(columns=self.rename_mapping[self.dataset_name])
+            df = df.rename(columns=self.rename_mapping[self.dataset_name])
 
-        return df
+        # avoid randomness on column orders
+        return df.sort_index(axis=1)
