@@ -53,7 +53,6 @@ class SemEvalLoader(object):
         """Load data to pandas DataFrame on columns of label and text."""
         lines = open(self.input_file).read().splitlines()
         task_fields = self._subtasks[self.task_name]
-        data = {field_name: [] for field_name in task_fields}
 
         data = []
         for line in lines:
