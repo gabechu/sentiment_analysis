@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Dict, Optional
 
 from pandas import DataFrame
 
@@ -34,7 +34,9 @@ class SemEvalLoader(object):
                 f"available subtasks are {subtask_set}"
             )
 
-    def _parse_line(self, line: str, task_fields: Dict[str, int]) -> Dict[str, str]:
+    def _parse_line(
+        self, line: str, task_fields: Dict[str, int]
+    ) -> Optional[Dict[str, str]]:
         """Parse a line read from a SemEval file."""
         splits = line.rstrip().split("\t")
 
