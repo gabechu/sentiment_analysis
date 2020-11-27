@@ -56,6 +56,6 @@ def test_comprehend_detect_sentiment_non_support_language_code():
     with raises(ValueError) as err:
         model.detect_sentiment("Goedemorgen", "nl")
     assert str(err.value) == (
-        "Do not support language code nl, supports only "
+        "Comprehend does not support language code nl, supports only "
         "['de', 'en', 'es', 'it', 'pt', 'fr', 'ja', 'ko', 'hi', 'ar', 'zh', 'zh-TW']."
     )

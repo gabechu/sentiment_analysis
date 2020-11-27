@@ -36,7 +36,7 @@ class Comprehend(object):
     def detect_sentiment(self, text: str, language_code: str) -> Dict:
         if language_code not in self.supported_languages:
             raise ValueError(
-                f"Do not support language code {language_code}, "
+                f"Comprehend does not support language code {language_code}, "
                 f"supports only {self.supported_languages}."
             )
 
