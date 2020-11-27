@@ -6,18 +6,31 @@ authors = ["Gabe <wei.g.chu@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+<<<<<<< HEAD
 boto3 = "^1.16.17"
 python-decouple = "^3.3"
 checklist = "^0.0.10"
 jupyterlab = "^2.2.9"
 torch = "^1.7.0"
 tqdm = "^4.51.0"
+=======
+numpy = "^1.19.4"
+datasets = "^1.1.3"
+pandas = "^1.1.4"
+pakkr = "^0.1.0"
+python-decouple = "^3.3"
+>>>>>>> master
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 black = "^19.10b0"
 flake8 = "^3.7.9"
 mypy = "^0.761"
+<<<<<<< HEAD
+=======
+mock = "^4.0.2"
+pytest-env = "^0.6.2"
+>>>>>>> master
 moto = "^1.3.16"
 
 [build-system]
