@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List, Any
 
 from decouple import config
 from google.cloud import language_v1
@@ -46,16 +46,16 @@ class GoogleNaturalLanguage(object):
         }
 
     def _parse_response(self, response: AnalyzeSentimentResponse) -> Dict:
-        result = {
+        result: Dict[str, Any] = {
             "document_sentiment": {
                 "score": response.document_sentiment.score,
                 "magnitude": response.document_sentiment.magnitude,
-            },
-            "sentences": [],
+            }
         }
 
+        sentences_predictions: List[Dict] = []
         for sentence in response.sentences:
-            sentece_prediction = {
+            prediction: Dict = {
                 "text": {
                     "content": sentence.text.content,
                     "begin_offset": sentence.text.begin_offset,
@@ -65,7 +65,9 @@ class GoogleNaturalLanguage(object):
                     "magnitude": sentence.sentiment.magnitude,
                 },
             }
-            result["sentences"].append(sentece_prediction)
+            sentences_predictions.append(prediction)
+        result["sentences"] = sentences_predictions
+
         return result
 
     def detect_sentiment(self, text: str, language_code: str = "en") -> Dict:
