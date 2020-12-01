@@ -46,6 +46,19 @@ class GoogleNaturalLanguage(object):
         }
 
     def _parse_response(self, response: AnalyzeSentimentResponse) -> Dict:
+        """
+        The structure of the returned dict:
+            document_sentiment
+                - score
+                - magnitude
+            sentences
+                - text
+                    - content
+                    - begin_offset
+                - sentiment
+                    - score
+                    - magnitude
+        """
         result: Dict[str, Any] = {
             "document_sentiment": {
                 "score": response.document_sentiment.score,
@@ -69,6 +82,12 @@ class GoogleNaturalLanguage(object):
         result["sentences"] = sentences_predictions
 
         return result
+
+    def add_sentiment_labels(
+        self, detect_results: Dict, negative_neutral_cut: int, positive_neutral_cut: int
+    ) -> Dict:
+        """Add 3-point scale labels: negative, neutral and positive."""
+        ...
 
     def detect_sentiment(self, text: str, language_code: str = "en") -> Dict:
         request = self.config_request(text, language_code)
