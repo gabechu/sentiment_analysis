@@ -1,7 +1,7 @@
 from google.cloud.language_v1 import Sentence, Sentiment, TextSpan
 from google.cloud.language_v1.types.language_service import AnalyzeSentimentResponse
 from mock import patch
-from pytest import fixture
+from pytest import fixture, raises
 
 from .google_natural_language import GoogleNaturalLanguage
 
@@ -64,3 +64,11 @@ def test_googlenaturallanguage_detect_sentiment(mock_client, fake_response):
         "little movie. Madonna is GREAT in this clever comedy."
     )
     assert actual == fake_response
+
+
+@patch("sentiment_analysis.models.google_natural_language.GoogleNaturalLanguage.client")
+def test_googlenaturallanguage_detect_sentiment_unsupported_language(mock_client):
+    model = GoogleNaturalLanguage()
+    with raises(ValueError) as err:
+        model.detect_sentiment("नमस्ते", "hi")
+    assert str(err.value) == "Language code hi is not supported by Google NL."

@@ -49,5 +49,9 @@ class GoogleNaturalLanguage(object):
     def detect_sentiment(
         self, text: str, language_code: str = "en"
     ) -> AnalyzeSentimentResponse:
+        if language_code not in self.supported_languages:
+            raise ValueError(
+                f"Language code {language_code} is not supported by Google NL."
+            )
         request = self._config_request(text, language_code)
         return self.client.analyze_sentiment(request=request)
