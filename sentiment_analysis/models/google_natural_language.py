@@ -35,7 +35,7 @@ class GoogleNaturalLanguage(object):
             self.__credentials_path
         )
 
-    def config_request(self, text: str, language_code: str) -> Dict:
+    def _config_request(self, text: str, language_code: str) -> Dict:
         return {
             "document": {
                 "content": text,
@@ -48,5 +48,5 @@ class GoogleNaturalLanguage(object):
     def detect_sentiment(
         self, text: str, language_code: str = "en"
     ) -> AnalyzeSentimentResponse:
-        request = self.config_request(text, language_code)
+        request = self._config_request(text, language_code)
         return self.client.analyze_sentiment(request=request)
