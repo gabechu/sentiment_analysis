@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Dict
 
 from decouple import config
 from google.cloud import language_v1
@@ -45,44 +45,8 @@ class GoogleNaturalLanguage(object):
             "encoding_type": language_v1.EncodingType.UTF8,
         }
 
-    def parse_protobuf(self, response: AnalyzeSentimentResponse) -> Dict:
-        """
-        Parse protobuf and return a dict of the structure below:
-            document_sentiment
-                - score
-                - magnitude
-            sentences
-                - text
-                    - content
-                    - begin_offset
-                - sentiment
-                    - score
-                    - magnitude
-        """
-        result: Dict[str, Any] = {
-            "document_sentiment": {
-                "score": response.document_sentiment.score,
-                "magnitude": response.document_sentiment.magnitude,
-            }
-        }
-
-        sentences_predictions: List[Dict] = []
-        for sentence in response.sentences:
-            prediction: Dict = {
-                "text": {
-                    "content": sentence.text.content,
-                    "begin_offset": sentence.text.begin_offset,
-                },
-                "sentiment": {
-                    "score": sentence.sentiment.score,
-                    "magnitude": sentence.sentiment.magnitude,
-                },
-            }
-            sentences_predictions.append(prediction)
-        result["sentences"] = sentences_predictions
-
-        return result
-
-    def detect_sentiment(self, text: str, language_code: str = "en") -> Dict:
+    def detect_sentiment(
+        self, text: str, language_code: str = "en"
+    ) -> AnalyzeSentimentResponse:
         request = self.config_request(text, language_code)
         return self.client.analyze_sentiment(request=request)
