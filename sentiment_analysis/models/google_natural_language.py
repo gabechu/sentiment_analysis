@@ -47,7 +47,7 @@ class GoogleNaturalLanguage(object):
 
     def parse_protobuf(self, response: AnalyzeSentimentResponse) -> Dict:
         """
-        The structure of the returned dict:
+        Parse protobuf and return a dict of the structure below:
             document_sentiment
                 - score
                 - magnitude
