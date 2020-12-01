@@ -6,6 +6,8 @@ from pytest import fixture, raises
 from .google_natural_language import GoogleNaturalLanguage
 
 
+# This fixture is a reference shows how the repsonse from Google API on sentiment
+# analysis looks like.
 @fixture
 def fake_response() -> AnalyzeSentimentResponse:
     document_sentiment = Sentiment(score=1.600000023841858, magnitude=0.800000011920929)
