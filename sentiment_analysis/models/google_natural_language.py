@@ -45,7 +45,7 @@ class GoogleNaturalLanguage(object):
             "encoding_type": language_v1.EncodingType.UTF8,
         }
 
-    def _parse_response(self, response: AnalyzeSentimentResponse) -> Dict:
+    def parse_protobuf(self, response: AnalyzeSentimentResponse) -> Dict:
         """
         The structure of the returned dict:
             document_sentiment
@@ -83,44 +83,6 @@ class GoogleNaturalLanguage(object):
 
         return result
 
-    def add_4_point_labels(
-        self,
-        sentiment_results: Dict,
-        negative_neutral_cut: float = -0.25,
-        positive_neutral_cut: float = 0.25,
-    ) -> Dict:
-        """Add 4-point labels: negative, neutral, positive and mixed.
-
-        Sentiment results consist scores and magnitude, we would have to convert the
-        scores into class labels according to their magnitudes by thresholding.
-        """
-        ...
-
-    def add_3_point_labels(
-        self,
-        sentiment_results: Dict,
-        negative_neutral_cut: float = -0.25,
-        positive_neutral_cut: float = 0.25,
-    ) -> Dict:
-        """Add 3-point labels: negative, neutral and positive.
-
-        Sentiment results consist scores, we would have to convert the scores into class
-        labels by thresholding.
-        """
-        ...
-
-    def add_2_point_labels(
-        self, sentiment_results: Dict, negative_positive_cut: float = 0.0
-    ) -> Dict:
-        """Add 2-point labels: negative and positive.
-
-        Sentiment results consist scores, we would have to convert the scores into class
-        labels by thresholding.
-        """
-        ...
-
     def detect_sentiment(self, text: str, language_code: str = "en") -> Dict:
         request = self.config_request(text, language_code)
-        response = self.client.analyze_sentiment(request=request)
-
-        return self._parse_response(response)
+        return self.client.analyze_sentiment(request=request)
