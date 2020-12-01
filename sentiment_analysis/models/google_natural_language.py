@@ -2,6 +2,7 @@ from typing import Dict
 
 from decouple import config
 from google.cloud import language_v1
+from google.cloud.language_v1 import LanguageServiceClient
 from google.cloud.language_v1.types.language_service import AnalyzeSentimentResponse
 
 
@@ -30,7 +31,7 @@ class GoogleNaturalLanguage(object):
         ]
 
     @property
-    def client(self):
+    def client(self) -> LanguageServiceClient:
         return language_v1.LanguageServiceClient.from_service_account_json(
             self.__credentials_path
         )
