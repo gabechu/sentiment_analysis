@@ -11,6 +11,7 @@ class Comprehend(object):
 
     def __init__(self, aws_region: str = "us-west-2"):
         self.aws_region = aws_region
+        # https://docs.aws.amazon.com/comprehend/latest/dg/supported-languages.html#supported-languages-1
         self.supported_languages = [
             "de",
             "en",
