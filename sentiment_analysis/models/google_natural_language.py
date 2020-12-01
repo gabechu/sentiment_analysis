@@ -83,10 +83,28 @@ class GoogleNaturalLanguage(object):
 
         return result
 
-    def add_sentiment_labels(
-        self, detect_results: Dict, negative_neutral_cut: int, positive_neutral_cut: int
+    def add_4_point_labels(
+        self,
+        sentiment_results: Dict,
+        negative_neutral_cut: float = -0.25,
+        positive_neutral_cut: float = 0.25,
     ) -> Dict:
-        """Add 3-point scale labels: negative, neutral and positive."""
+        """Add 4-point labels: negative, neutral, positive and mixed."""
+        ...
+
+    def add_3_point_labels(
+        self,
+        sentiment_results: Dict,
+        negative_neutral_cut: float = -0.25,
+        positive_neutral_cut: float = 0.25,
+    ) -> Dict:
+        """Add 3-point labels: negative, neutral and positive."""
+        ...
+
+    def add_2_point_labels(
+        self, sentiment_results: Dict, negative_positive_cut: float = 0.0
+    ) -> Dict:
+        """Add 2-point labels: negative and positive."""
         ...
 
     def detect_sentiment(self, text: str, language_code: str = "en") -> Dict:
