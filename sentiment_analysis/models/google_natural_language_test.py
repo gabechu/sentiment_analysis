@@ -66,5 +66,38 @@ def test_googlenaturallanguage_detect_sentiment(mock_client, fake_response):
     assert actual == fake_response
 
 
-def test_googlenaturallanguage_parse_response():
-    ...
+def test_googlenaturallanguage_parse_protobuf(fake_response):
+    model = GoogleNaturalLanguage()
+
+    actual = model.parse_protobuf(fake_response)
+    assert actual == {
+        "document_sentiment": {
+            "score": 1.600000023841858,
+            "magnitude": 0.800000011920929,
+        },
+        "sentences": [
+            {
+                "text": {
+                    "content": (
+                        "Don't listen to what the critics have always said about "
+                        "this cute, charming little movie."
+                    ),
+                    "begin_offset": 0,
+                },
+                "sentiment": {
+                    "score": 0.6000000238418579,
+                    "magnitude": 0.6000000238418579,
+                },
+            },
+            {
+                "text": {
+                    "content": "Madonna is GREAT in this clever comedy.",
+                    "begin_offset": 90,
+                },
+                "sentiment": {
+                    "score": 0.8999999761581421,
+                    "magnitude": 0.8999999761581421,
+                },
+            },
+        ],
+    }
