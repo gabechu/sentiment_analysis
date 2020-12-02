@@ -9,5 +9,7 @@ class SentimentScore(TypedDict):
 
 
 class ComprehendResults(TypedDict):
+    # Sentiment can have these 4 labels:
+    # POSITIVE, NEGATIVE, NEUTRAL and MIXED
     Sentiment: str
     SentimentScore: SentimentScore
