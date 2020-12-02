@@ -1,4 +1,4 @@
-from typing import Dict, Callable, List
+from typing import Dict
 
 from decouple import config
 from google.cloud import language_v1

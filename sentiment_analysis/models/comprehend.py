@@ -43,7 +43,7 @@ class Comprehend(object):
             )
 
         # return with keys of ['Sentiment', 'SentimentScore', 'ResponseMetadata']
-        response: Dict = self._predict(Text=text, LanguageCode=language_code)
+        response = self._predict(Text=text, LanguageCode=language_code)
         keep_keys = {"Sentiment", "SentimentScore"}
 
         return {key: value for key, value in response.items() if key in keep_keys}
