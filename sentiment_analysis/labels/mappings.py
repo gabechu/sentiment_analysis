@@ -1,27 +1,34 @@
 from google.cloud.language_v1.types.language_service import AnalyzeSentimentResponse
 
 from .dataset_labels import SemEvalSubTaskALabel, SpanishArilinesTweetsLabel
-from .model_labels import ComprehendResults
+from .model_labels import ComprehendResults, ComprehendLabel
+from typing import Union
 
 
 class ComprehendResultsMapper(object):
     def to_spanish_airlines_tweets_label(
         self, model_results: ComprehendResults,
-    ) -> SpanishArilinesTweetsLabel:
+    ) -> Union[SpanishArilinesTweetsLabel, ComprehendLabel]:
         # keys are model labels and values are dataset labels
         # no mapping for MIXED, which means any MIXED label would be count as wrong
         # classifications in evaluation.
         mapping = {"POSITIVE": "positive", "NEGATIVE": "negative", "NEUTRAL": "neutral"}
-        predicted_sentiment = model_results["Sentiment"]
+        predicted_sentiment: str = model_results["Sentiment"]
 
         if predicted_sentiment in mapping:
-            str_label = mapping[predicted_sentiment]
-        return SpanishArilinesTweetsLabel(str_label)
+            return SpanishArilinesTweetsLabel(mapping[predicted_sentiment])
+        else:
+            return ComprehendLabel(predicted_sentiment)
 
     def to_semeval_subtask_a_label(
         self, model_results: ComprehendResults,
-    ) -> SemEvalSubTaskALabel:
-        return SemEvalSubTaskALabel(model_results["Sentiment"])
+    ) -> Union[SemEvalSubTaskALabel, ComprehendLabel]:
+        predicted_sentiment: str = model_results["Sentiment"]
+
+        if predicted_sentiment in SemEvalSubTaskALabel.__members__:
+            return SemEvalSubTaskALabel(predicted_sentiment)
+        else:
+            return ComprehendLabel(predicted_sentiment)
 
 
 class GoogleNaturalLangaugeResultsMapper(object):
