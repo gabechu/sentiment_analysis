@@ -3,6 +3,7 @@ from typing import Dict
 from botocore.client import BaseClient
 from decouple import config
 from sentiment_analysis.aws.config_session import config_cognito_session
+from sentiment_analysis.labels.model_labels import ComprehendResults
 
 
 class Comprehend(object):
@@ -34,7 +35,7 @@ class Comprehend(object):
         sess = config_cognito_session(self.__IDENTITY_POOL_ID, self.aws_region)
         return sess.client(service_name="comprehend", region_name=self.aws_region)
 
-    def detect_sentiment(self, text: str, language_code: str) -> Dict:
+    def detect_sentiment(self, text: str, language_code: str) -> ComprehendResults:
         if language_code not in self.supported_languages:
             raise ValueError(
                 f"Comprehend does not support language code {language_code}, "
