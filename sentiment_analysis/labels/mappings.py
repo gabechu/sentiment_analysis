@@ -9,7 +9,8 @@ class ComprehendResultsMapper(object):
         self, model_results: ComprehendResults,
     ) -> SpanishArilinesTweetsLabel:
         # keys are model labels and values are dataset labels
-        # no mapping for MIXED doing so it is deemed as a wrong classification
+        # no mapping for MIXED, which means any MIXED label would be count as wrong
+        # classifications in evaluation.
         mapping = {"POSITIVE": "positive", "NEGATIVE": "negative", "NEUTRAL": "neutral"}
         predicted_sentiment = model_results["Sentiment"]
 
@@ -20,8 +21,7 @@ class ComprehendResultsMapper(object):
     def to_semeval_subtask_a_label(
         self, model_results: ComprehendResults,
     ) -> SemEvalSubTaskALabel:
-        str_label = model_results["Sentiment"]
-        return SemEvalSubTaskALabel(str_label)
+        return SemEvalSubTaskALabel(model_results["Sentiment"])
 
 
 class GoogleNaturalLangaugeResultsMapper(object):
