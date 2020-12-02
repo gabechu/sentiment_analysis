@@ -9,5 +9,5 @@ class SpanishArilinesTweetsLabel(Enum):
 
 class SemEvalSubTaskALabel(Enum):
     NEGATIVE = "NEGATIVE"
-    NEUTRA = "NEUTRA"
+    NETRUAL = "NEUTRAL"
     POSITIVE = "POSITIVE"
