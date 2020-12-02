@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Callable, List
 
 from decouple import config
 from google.cloud import language_v1
@@ -9,7 +9,7 @@ from google.cloud.language_v1.types.language_service import AnalyzeSentimentResp
 class GoogleNaturalLanguage(object):
     __credentials_path = config("GOOGLE_APPLICATION_CREDENTIALS")
 
-    def __init__(self):
+    def __init__(self, get_labels: Callable[[AnalyzeSentimentResponse], List[str]]):
         # https://cloud.google.com/natural-language/docs/languages#sentiment_analysis
         self.supported_languages = [
             "ar",
@@ -29,6 +29,12 @@ class GoogleNaturalLanguage(object):
             "tr",
             "vi",
         ]
+        self._get_labels = get_labels
+
+    def get_predicted_labels(
+        self, sentiment_results: AnalyzeSentimentResponse
+    ) -> List[str]:
+        return self._get_labels(sentiment_results)
 
     @property
     def client(self) -> LanguageServiceClient:
