@@ -1,17 +1,57 @@
-from .datasets_labels import SpanishArilinesTweetsLabel, SemEvalSubTaskALabel
+from google.cloud.language_v1.types.language_service import AnalyzeSentimentResponse
+
+from .dataset_labels import SemEvalSubTaskALabel, SpanishArilinesTweetsLabel
+from .model_labels import ComprehendResults
 
 
-def comprehend_results_to_spanish_airlines_tweets(model_results) -> SpanishAirlinesTweetsLabel:
-    ...
+class ComprehendResultsMapper(object):
+    def to_spanish_airlines_tweets_label(
+        self, model_results: ComprehendResults,
+    ) -> SpanishArilinesTweetsLabel:
+        # keys are model labels and values are dataset labels
+        # no mapping for MIXED doing so it is deemed as a wrong classification
+        mapping = {"POSITIVE": "positive", "NEGATIVE": "negative", "NEUTRAL": "neutral"}
+        predicted_sentiment = model_results["Sentiment"]
+
+        if predicted_sentiment in mapping:
+            str_label = mapping[predicted_sentiment]
+        return SpanishArilinesTweetsLabel(str_label)
+
+    def to_semeval_subtask_a_label(
+        self, model_results: ComprehendResults,
+    ) -> SemEvalSubTaskALabel:
+        str_label = model_results["Sentiment"]
+        return SemEvalSubTaskALabel(str_label)
 
 
-def comprehend_results_to_semeval_subtask_a(model_results) -> SemEvalSubTaskALabel:
-    ...
+class GoogleNaturalLangaugeResultsMapper(object):
+    positive_neutral_cutoff = 0.25
+    negative_neutral_cutoff = -0.25
 
+    def to_spanish_airlines_tweets(
+        self, model_results: AnalyzeSentimentResponse,
+    ) -> SpanishArilinesTweetsLabel:
+        score = model_results.document_sentiment.score
 
-def google_natural_language_results_to_spanish_airlines_tweets(model_results) -> SpanishAirlinesTweetsLabel:
-    ...
+        if score > self.positive_neutral_cutoff:
+            str_label = "positive"
+        elif score < self.negative_neutral_cutoff:
+            str_label = "negative"
+        else:
+            str_label = "neutral"
 
+        return SpanishArilinesTweetsLabel(str_label)
 
-def google_natural_language_results_to_semeval_subtask_a(model_results) -> SemEvalSubTaskALabel:
-    ...
+    def google_natural_language_results_to_semeval_subtask_a(
+        self, model_results: AnalyzeSentimentResponse,
+    ) -> SemEvalSubTaskALabel:
+        score = model_results.document_sentiment.score
+
+        if score > self.positive_neutral_cutoff:
+            str_label = "POSITIVE"
+        elif score < self.negative_neutral_cutoff:
+            str_label = "NEGATIVE"
+        else:
+            str_label = "NEUTRAL"
+
+        return SemEvalSubTaskALabel(str_label)
