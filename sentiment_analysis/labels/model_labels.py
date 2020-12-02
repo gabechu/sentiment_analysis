@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import TypedDict
 
 
@@ -13,3 +14,10 @@ class ComprehendResults(TypedDict):
     # POSITIVE, NEGATIVE, NEUTRAL and MIXED
     Sentiment: str
     SentimentScore: SentimentScore
+
+
+class ComprehendLabel(Enum):
+    POSITIVE = "POSITIVE"
+    NEUTRAL = "NEUTRAL"
+    NEGATIVE = "NEGATIVE"
+    MIXED = "MIXED"
