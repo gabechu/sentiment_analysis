@@ -32,6 +32,8 @@ class ComprehendResultsMapper(object):
 
 
 class GoogleNaturalLangaugeResultsMapper(object):
+    # The cutoffs are fixed. We could need some refactoring
+    # to make them customisable
     positive_neutral_cutoff = 0.25
     negative_neutral_cutoff = -0.25
 
