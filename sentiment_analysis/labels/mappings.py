@@ -5,7 +5,7 @@ from typing import Any
 from google.cloud.language_v1.types.language_service import AnalyzeSentimentResponse
 
 from .dataset_labels import SemEvalSubTaskALabel, SpanishAirlinesTweetsLabel
-from .model_labels import ComprehendLabel, ComprehendResults
+from .model_labels import ComprehendResults
 
 
 class LabelMapper(ABC):
@@ -20,7 +20,7 @@ class ComprehendLabelToSpanishAirlinesTweetsLabel(LabelMapper):
 
         if predicted_sentiment in SpanishAirlinesTweetsLabel.__members__:
             return SpanishAirlinesTweetsLabel(predicted_sentiment)
-        return SpanishAirlinesTweetsLabel.unknown
+        return SpanishAirlinesTweetsLabel.other
 
 
 class ComprehendLabelToSemEvalSubtaskALabel(LabelMapper):
@@ -29,7 +29,7 @@ class ComprehendLabelToSemEvalSubtaskALabel(LabelMapper):
 
         if predicted_sentiment in SemEvalSubTaskALabel.__members__:
             return SemEvalSubTaskALabel(predicted_sentiment)
-        return ComprehendLabel.unknown
+        return SemEvalSubTaskALabel.OTHER
 
 
 class GoogleNaturalLanguageLabelToSpanishAirlinesTweetsLabel(LabelMapper):
@@ -38,7 +38,8 @@ class GoogleNaturalLanguageLabelToSpanishAirlinesTweetsLabel(LabelMapper):
         positive_neutral_cutoff: float = 0.25,
         negative_neutral_cutoff: float = -0.25,
     ):
-        ...
+        self.positive_neutral_cutoff = positive_neutral_cutoff
+        self.negative_neutral_cutoff = negative_neutral_cutoff
 
     def map(
         self, model_results: AnalyzeSentimentResponse,
@@ -61,7 +62,8 @@ class GoogleNaturalLanguageLabelToSemEvalSubtaskALabel(LabelMapper):
         positive_neutral_cutoff: float = 0.25,
         negative_neutral_cutoff: float = -0.25,
     ):
-        ...
+        self.positive_neutral_cutoff = positive_neutral_cutoff
+        self.negative_neutral_cutoff = negative_neutral_cutoff
 
     def map(self, model_results: AnalyzeSentimentResponse,) -> SemEvalSubTaskALabel:
         score = model_results.document_sentiment.score
