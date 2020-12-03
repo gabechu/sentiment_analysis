@@ -15,7 +15,7 @@ class LabelMapper(ABC):
 
 
 class ComprehendLabelToSpanishAirlinesTweetsLabel(LabelMapper):
-    def map(self, model_results: ComprehendResults,) -> SpanishAirlinesTweetsLabel:
+    def map(self, model_results: ComprehendResults) -> SpanishAirlinesTweetsLabel:
         predicted_sentiment: str = model_results["Sentiment"].lower()
 
         if predicted_sentiment in SpanishAirlinesTweetsLabel.__members__:
@@ -24,7 +24,7 @@ class ComprehendLabelToSpanishAirlinesTweetsLabel(LabelMapper):
 
 
 class ComprehendLabelToSemEvalSubtaskALabel(LabelMapper):
-    def map(self, model_results: ComprehendResults) -> SpanishAirlinesTweetsLabel:
+    def map(self, model_results: ComprehendResults) -> SemEvalSubTaskALabel:
         predicted_sentiment: str = model_results["Sentiment"]
 
         if predicted_sentiment in SemEvalSubTaskALabel.__members__:
