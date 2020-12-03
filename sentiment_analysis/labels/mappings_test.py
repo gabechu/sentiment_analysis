@@ -6,6 +6,7 @@ from sentiment_analysis.labels.model_labels import ComprehendResults
 from .mappings import ComprehendResultsMapper, GoogleNaturalLangaugeResultsMapper
 
 
+# Test data preparation
 def get_comprehend_results(sentiment: str) -> ComprehendResults:
     # choices of sentiment are POSITIVE, NEGATIVE and NEUTRAL
     return {
@@ -43,6 +44,7 @@ def get_analyze_sentiment_response(doc_score: float) -> AnalyzeSentimentResponse
     )
 
 
+# Actual tests start here
 @pytest.mark.parametrize(
     "test_label, expected",
     [
@@ -78,14 +80,16 @@ def test_comprehendresultsmapper_to_spanish_airlines_tweets_label_invalid_sentim
         ("MIXED", "MIXED"),
     ],
 )
-def test_comprehendresultsmapper_to_semeval_subtask_a_label_positive(
-    test_label, expected
-):
+def test_comprehendresultsmapper_to_semeval_subtask_a_label(test_label, expected):
     comprehend_results = get_comprehend_results(test_label)
     mapper = ComprehendResultsMapper()
 
     actual = mapper.to_semeval_subtask_a_label(comprehend_results)
     assert actual.value == expected
+
+
+def test_comprehendresultsmapper_to_semeval_subtask_a_label_invalid():
+    ...
 
 
 @pytest.mark.parametrize(
@@ -105,4 +109,24 @@ def test_googlenaturallangaugeresultsmapper_to_spanish_airlines_tweets_label(
     mapper = GoogleNaturalLangaugeResultsMapper()
 
     actual = mapper.to_spanish_airlines_tweets(google_results)
+    assert actual.value == expected
+
+
+@pytest.mark.parametrize(
+    "test_score, expected",
+    [
+        (0.8, "POSITIVE"),
+        (0.0, "NEUTRAL"),
+        (-0.8, "NEGATIVE"),
+        (0.25, "NEUTRAL"),
+        (-0.25, "NEUTRAL"),
+    ],
+)
+def test_googlenaturallangaugeresultsmapper_to_semeval_subtask_a_label(
+    test_score, expected
+):
+    google_results = get_analyze_sentiment_response(test_score)
+    mapper = GoogleNaturalLangaugeResultsMapper()
+
+    actual = mapper.to_semeval_subtask_a(google_results)
     assert actual.value == expected
