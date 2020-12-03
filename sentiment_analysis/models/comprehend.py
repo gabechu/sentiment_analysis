@@ -1,5 +1,3 @@
-from typing import Dict
-
 from botocore.client import BaseClient
 from decouple import config
 from sentiment_analysis.aws.config_session import config_cognito_session
