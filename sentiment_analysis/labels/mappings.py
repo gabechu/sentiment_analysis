@@ -49,7 +49,7 @@ class GoogleNaturalLangaugeResultsMapper(object):
 
         return SpanishArilinesTweetsLabel(str_label)
 
-    def google_natural_language_results_to_semeval_subtask_a(
+    def to_semeval_subtask_a(
         self, model_results: AnalyzeSentimentResponse,
     ) -> SemEvalSubTaskALabel:
         score = model_results.document_sentiment.score
