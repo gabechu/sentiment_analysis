@@ -3,14 +3,19 @@ from google.cloud.language_v1 import Sentence, Sentiment, TextSpan
 from google.cloud.language_v1.types.language_service import AnalyzeSentimentResponse
 from sentiment_analysis.labels.model_labels import ComprehendResults
 
-from .mappings import ComprehendResultsMapper, GoogleNaturalLangaugeResultsMapper
+from .mappings import (
+    ComprehendLabelToSemEvalSubtaskALabel,
+    ComprehendLabelToSpanishAirlinesTweetsLabel,
+    GoogleNaturalLanguageLabelToSpanishAirlinesTweetsLabel,
+    GoogleNaturalLanguageLabelToSemEvalSubtaskALabel,
+)
 
 
 # Test data preparation
 def get_comprehend_results(sentiment: str) -> ComprehendResults:
     # choices of sentiment are POSITIVE, NEGATIVE and NEUTRAL
     return {
-        "Sentiment": "POSITIVE",
+        "Sentiment": sentiment,
         "SentimentScore": {
             "Positive": 0.8893707394599915,
             "Negative": 0.00359430443495512,
@@ -55,31 +60,22 @@ def get_analyze_sentiment_response(doc_score: float) -> AnalyzeSentimentResponse
     )
 
 
-# Actual tests start here
+# Tests start here
 @pytest.mark.parametrize(
     "test_label, expected",
     [
         ("POSITIVE", "positive"),
         ("NEUTRAL", "neutral"),
         ("NEGATIVE", "negative"),
-        ("MIXED", "MIXED"),
+        ("MIXED", "other"),
     ],
 )
-def test_comprehendresultsmapper_to_spanish_airlines_tweets_label(test_label, expected):
+def test_comprehend_labe_to_spanish_airlines_tweets_label(test_label, expected):
     comprehend_results = get_comprehend_results(test_label)
-    mapper = ComprehendResultsMapper()
+    mapper = ComprehendLabelToSpanishAirlinesTweetsLabel()
 
-    actual = mapper.to_spanish_airlines_tweets_label(comprehend_results)
+    actual = mapper.map(comprehend_results)
     assert actual.value == expected
-
-
-def test_comprehendresultsmapper_to_spanish_airlines_tweets_label_invalid_sentiment():
-    comprehend_results = get_comprehend_results("InvalidLabel")
-    mapper = ComprehendResultsMapper()
-
-    with pytest.raises(ValueError) as err:
-        mapper.to_spanish_airlines_tweets_label(comprehend_results)
-    assert str(err.value) == "'InvalidLabel' is not a valid ComprehendLabel"
 
 
 @pytest.mark.parametrize(
@@ -88,24 +84,15 @@ def test_comprehendresultsmapper_to_spanish_airlines_tweets_label_invalid_sentim
         ("POSITIVE", "POSITIVE"),
         ("NEUTRAL", "NEUTRAL"),
         ("NEGATIVE", "NEGATIVE"),
-        ("MIXED", "MIXED"),
+        ("MIXED", "OTHER"),
     ],
 )
-def test_comprehendresultsmapper_to_semeval_subtask_a_label(test_label, expected):
+def test_comprehend_label_to_semeval_subtask_a_label(test_label, expected):
     comprehend_results = get_comprehend_results(test_label)
-    mapper = ComprehendResultsMapper()
+    mapper = ComprehendLabelToSemEvalSubtaskALabel()
 
-    actual = mapper.to_semeval_subtask_a_label(comprehend_results)
+    actual = mapper.map(comprehend_results)
     assert actual.value == expected
-
-
-def test_comprehendresultsmapper_to_semeval_subtask_a_label_invalid():
-    comprehend_results = get_comprehend_results("InvalidLabel")
-    mapper = ComprehendResultsMapper()
-
-    with pytest.raises(ValueError) as err:
-        mapper.to_semeval_subtask_a_label(comprehend_results)
-    assert str(err.value) == "'InvalidLabel' is not a valid ComprehendLabel"
 
 
 @pytest.mark.parametrize(
@@ -118,13 +105,13 @@ def test_comprehendresultsmapper_to_semeval_subtask_a_label_invalid():
         (-0.25, "neutral"),
     ],
 )
-def test_googlenaturallangaugeresultsmapper_to_spanish_airlines_tweets_label(
+def test_google_natural_language_label_to_spanish_airlines_tweets_label(
     test_score, expected
 ):
     google_results = get_analyze_sentiment_response(test_score)
-    mapper = GoogleNaturalLangaugeResultsMapper()
+    mapper = GoogleNaturalLanguageLabelToSpanishAirlinesTweetsLabel()
 
-    actual = mapper.to_spanish_airlines_tweets(google_results)
+    actual = mapper.map(google_results)
     assert actual.value == expected
 
 
@@ -138,11 +125,9 @@ def test_googlenaturallangaugeresultsmapper_to_spanish_airlines_tweets_label(
         (-0.25, "NEUTRAL"),
     ],
 )
-def test_googlenaturallangaugeresultsmapper_to_semeval_subtask_a_label(
-    test_score, expected
-):
+def test_google_natural_language_label_to_semeval_subtask_a_label(test_score, expected):
     google_results = get_analyze_sentiment_response(test_score)
-    mapper = GoogleNaturalLangaugeResultsMapper()
+    mapper = GoogleNaturalLanguageLabelToSemEvalSubtaskALabel()
 
-    actual = mapper.to_semeval_subtask_a(google_results)
+    actual = mapper.map(google_results)
     assert actual.value == expected

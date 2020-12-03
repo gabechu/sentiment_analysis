@@ -10,6 +10,6 @@ class SpanishAirlinesTweetsLabel(Enum):
 
 class SemEvalSubTaskALabel(Enum):
     NEGATIVE = "NEGATIVE"
-    NETRUAL = "NEUTRAL"
+    NEUTRAL = "NEUTRAL"
     POSITIVE = "POSITIVE"
     OTHER = "OTHER"
