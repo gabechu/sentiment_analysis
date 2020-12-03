@@ -30,6 +30,7 @@ class ComprehendResults(TypedDict):
     ResponseMetadata: ResponseMetadata
 
 
+# Referece of comprehend labels
 class ComprehendLabel(Enum):
     POSITIVE = "POSITIVE"
     NEUTRAL = "NEUTRAL"
