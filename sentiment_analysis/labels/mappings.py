@@ -1,20 +1,10 @@
-from abc import ABC, abstractmethod
-from enum import Enum
-from typing import Any
-
 from google.cloud.language_v1.types.language_service import AnalyzeSentimentResponse
 
 from .dataset_labels import SemEvalSubTaskALabel, SpanishAirlinesTweetsLabel
 from .model_labels import ComprehendResults
 
 
-class LabelMapper(ABC):
-    @abstractmethod
-    def map(model_results: Any) -> Enum:
-        ...
-
-
-class ComprehendLabelToSpanishAirlinesTweetsLabel(LabelMapper):
+class ComprehendLabelToSpanishAirlinesTweetsLabel:
     def map(self, model_results: ComprehendResults) -> SpanishAirlinesTweetsLabel:
         predicted_sentiment: str = model_results["Sentiment"].lower()
 
@@ -23,7 +13,7 @@ class ComprehendLabelToSpanishAirlinesTweetsLabel(LabelMapper):
         return SpanishAirlinesTweetsLabel.other
 
 
-class ComprehendLabelToSemEvalSubtaskALabel(LabelMapper):
+class ComprehendLabelToSemEvalSubtaskALabel:
     def map(self, model_results: ComprehendResults) -> SemEvalSubTaskALabel:
         predicted_sentiment: str = model_results["Sentiment"]
 
@@ -32,7 +22,7 @@ class ComprehendLabelToSemEvalSubtaskALabel(LabelMapper):
         return SemEvalSubTaskALabel.OTHER
 
 
-class GoogleNaturalLanguageLabelToSpanishAirlinesTweetsLabel(LabelMapper):
+class GoogleNaturalLanguageLabelToSpanishAirlinesTweetsLabel:
     def __init__(
         self,
         positive_neutral_cutoff: float = 0.25,
@@ -56,7 +46,7 @@ class GoogleNaturalLanguageLabelToSpanishAirlinesTweetsLabel(LabelMapper):
         return SpanishAirlinesTweetsLabel(label)
 
 
-class GoogleNaturalLanguageLabelToSemEvalSubtaskALabel(LabelMapper):
+class GoogleNaturalLanguageLabelToSemEvalSubtaskALabel:
     def __init__(
         self,
         positive_neutral_cutoff: float = 0.25,
