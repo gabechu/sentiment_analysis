@@ -10,12 +10,23 @@ from .mappings import ComprehendResultsMapper, GoogleNaturalLangaugeResultsMappe
 def get_comprehend_results(sentiment: str) -> ComprehendResults:
     # choices of sentiment are POSITIVE, NEGATIVE and NEUTRAL
     return {
-        "Sentiment": sentiment,
+        "Sentiment": "POSITIVE",
         "SentimentScore": {
             "Positive": 0.8893707394599915,
             "Negative": 0.00359430443495512,
             "Neutral": 0.037097539752721786,
             "Mixed": 0.06993737816810608,
+        },
+        "ResponseMetadata": {
+            "RequestId": "72023c95-95bb-424a-9ee0-17325dfc852a",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "x-amzn-requestid": "72023c95-95bb-424a-9ee0-17325dfc852a",
+                "content-type": "application/x-amz-json-1.1",
+                "content-length": "163",
+                "date": "Thu, 26 Nov 2020 22:56:36 GMT",
+            },
+            "RetryAttempts": 0,
         },
     }
 
