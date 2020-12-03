@@ -1,66 +1,76 @@
+from abc import ABC, abstractmethod
+from enum import Enum
+from typing import Any
+
 from google.cloud.language_v1.types.language_service import AnalyzeSentimentResponse
 
-from .dataset_labels import SemEvalSubTaskALabel, SpanishArilinesTweetsLabel
-from .model_labels import ComprehendResults, ComprehendLabel
-from typing import Union
+from .dataset_labels import SemEvalSubTaskALabel, SpanishAirlinesTweetsLabel
+from .model_labels import ComprehendLabel, ComprehendResults
 
 
-class ComprehendResultsMapper(object):
-    def to_spanish_airlines_tweets_label(
-        self, model_results: ComprehendResults,
-    ) -> Union[SpanishArilinesTweetsLabel, ComprehendLabel]:
-        # keys are model labels and values are dataset labels
-        # no mapping for MIXED, which means any MIXED label would be count as wrong
-        # classifications in evaluation.
-        mapping = {"POSITIVE": "positive", "NEGATIVE": "negative", "NEUTRAL": "neutral"}
-        predicted_sentiment: str = model_results["Sentiment"]
+class LabelMapper(ABC):
+    @abstractmethod
+    def map(model_results: Any) -> Enum:
+        ...
 
-        if predicted_sentiment in mapping:
-            return SpanishArilinesTweetsLabel(mapping[predicted_sentiment])
-        else:
-            return ComprehendLabel(predicted_sentiment)
 
-    def to_semeval_subtask_a_label(
-        self, model_results: ComprehendResults,
-    ) -> Union[SemEvalSubTaskALabel, ComprehendLabel]:
+class ComprehendLabelToSpanishAirlinesTweetsLabel(LabelMapper):
+    def map(self, model_results: ComprehendResults,) -> SpanishAirlinesTweetsLabel:
+        predicted_sentiment: str = model_results["Sentiment"].lower()
+
+        if predicted_sentiment in SpanishAirlinesTweetsLabel.__members__:
+            return SpanishAirlinesTweetsLabel(predicted_sentiment)
+        return SpanishAirlinesTweetsLabel.unknown
+
+
+class ComprehendLabelToSemEvalSubtaskALabel(LabelMapper):
+    def map(self, model_results: ComprehendResults) -> SpanishAirlinesTweetsLabel:
         predicted_sentiment: str = model_results["Sentiment"]
 
         if predicted_sentiment in SemEvalSubTaskALabel.__members__:
             return SemEvalSubTaskALabel(predicted_sentiment)
-        else:
-            return ComprehendLabel(predicted_sentiment)
+        return ComprehendLabel.unknown
 
 
-class GoogleNaturalLangaugeResultsMapper(object):
-    # The cutoffs are fixed. We could need some refactoring
-    # to make them customisable
-    positive_neutral_cutoff = 0.25
-    negative_neutral_cutoff = -0.25
+class GoogleNaturalLanguageLabelToSpanishAirlinesTweetsLabel(LabelMapper):
+    def __init__(
+        self,
+        positive_neutral_cutoff: float = 0.25,
+        negative_neutral_cutoff: float = -0.25,
+    ):
+        ...
 
-    def to_spanish_airlines_tweets(
+    def map(
         self, model_results: AnalyzeSentimentResponse,
-    ) -> SpanishArilinesTweetsLabel:
+    ) -> SpanishAirlinesTweetsLabel:
         score = model_results.document_sentiment.score
 
         if score > self.positive_neutral_cutoff:
-            str_label = "positive"
+            label = "positive"
         elif score < self.negative_neutral_cutoff:
-            str_label = "negative"
+            label = "negative"
         else:
-            str_label = "neutral"
+            label = "neutral"
 
-        return SpanishArilinesTweetsLabel(str_label)
+        return SpanishAirlinesTweetsLabel(label)
 
-    def to_semeval_subtask_a(
-        self, model_results: AnalyzeSentimentResponse,
-    ) -> SemEvalSubTaskALabel:
+
+class GoogleNaturalLanguageLabelToSemEvalSubtaskALabel(LabelMapper):
+    def __init__(
+        self,
+        positive_neutral_cutoff: float = 0.25,
+        negative_neutral_cutoff: float = -0.25,
+    ):
+        ...
+
+    def map(self, model_results: AnalyzeSentimentResponse,) -> SemEvalSubTaskALabel:
         score = model_results.document_sentiment.score
 
         if score > self.positive_neutral_cutoff:
-            str_label = "POSITIVE"
+            label = "POSITIVE"
         elif score < self.negative_neutral_cutoff:
-            str_label = "NEGATIVE"
+            label = "NEGATIVE"
         else:
-            str_label = "NEUTRAL"
+            label = "NEUTRAL"
 
-        return SemEvalSubTaskALabel(str_label)
+        return SemEvalSubTaskALabel(label)
