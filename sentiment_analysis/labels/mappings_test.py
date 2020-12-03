@@ -89,7 +89,12 @@ def test_comprehendresultsmapper_to_semeval_subtask_a_label(test_label, expected
 
 
 def test_comprehendresultsmapper_to_semeval_subtask_a_label_invalid():
-    ...
+    comprehend_results = get_comprehend_results("InvalidLabel")
+    mapper = ComprehendResultsMapper()
+
+    with pytest.raises(ValueError) as err:
+        mapper.to_semeval_subtask_a_label(comprehend_results)
+    assert str(err.value) == "'InvalidLabel' is not a valid ComprehendLabel"
 
 
 @pytest.mark.parametrize(
